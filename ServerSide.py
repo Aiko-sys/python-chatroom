@@ -35,7 +35,7 @@ class TextDetails:
 
 def start_server():
     sock.listen()
-    print(f"[LISTENING] Server is listening on {ServerHost}")
+    print(f"[LISTENING] Server is listening on your local network")
 
     while True:
         ClientSocket, clientAdress  = sock.accept()
@@ -59,21 +59,15 @@ def handle_client(ClientSocket, clientAdress):
     clients.append(ClientSocket)
 
     # recive client name
-    try:
-        ClientNickName = ClientSocket.recv(header).decode(formatMessage)
-        if ClientNickName:
-                try:
-                    ClientNickName = int(ClientNickName)
-                except:
-                    print("[ERRO] can't recive username")
-                else:   
-                    ClientNickName = ClientSocket.recv(ClientNickName).decode(formatMessage)
+    ClientNickName = ClientSocket.recv(header).decode(formatMessage)
+    if ClientNickName:
+            try:
+                ClientNickName = int(ClientNickName)
+            except:
+                print("[ERRO] can't recive username")
+            else:   
+                ClientNickName = ClientSocket.recv(ClientNickName).decode(formatMessage)
                     
-    except ConnectionError:
-        print(f"[ERROR] {clientAdress[0]} left before set nickname")
-        clients.remove(ClientSocket)
-        clientConnected = False
-        
     #recive client messages  
     try:
         while clientConnected:
@@ -114,10 +108,10 @@ clients = []
 header = 64 
 formatMessage = "utf-8"
 
-ServerHost = socket.gethostbyname(socket.gethostname())
+localHost = '127.0.0.1'#socket.gethostbyname(socket.gethostname())
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-ServerAddress = (ServerHost, 5050)
+ServerAddress = (localHost, 5050)
 sock.bind(ServerAddress)
 
-print("[START] starting the server v1.0.0")
+print("[START] starting the server v1.0.1")
 start_server()
