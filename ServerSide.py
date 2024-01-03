@@ -108,9 +108,9 @@ clients = []
 header = 64 
 formatMessage = "utf-8"
 
-localHost = socket.gethostbyname(socket.gethostname())
+host = socket.gethostbyname(socket.gethostname())
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-ServerAddress = (localHost, 5050)
+ServerAddress = (host, 5050)
 sock.bind(ServerAddress)
 
 print("[START] starting the server v1.0.1")
