@@ -84,17 +84,21 @@ def recive_server_message():
             print("[ERROR] can't recive messages")
             ClientSock.close()
             break
+print(f"{colors.red}==========={colors.yellow} Checking {colors.red}==========={colors.default}")
+
+
 
 header = 64 
 formatMessage = "utf-8"
 os.system("cls")
-ServerAdressToConnect = ('127.0.0.1', 5050)
-ClientSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-
-print(f"{colors.red}==========={colors.yellow} Checking {colors.red}==========={colors.default}")
-
 nickname = str(input(textDetails.systemMessage["System"]+" define your nickname: ")).strip().replace(" ", "-")
+serverIP = str(input(textDetails.systemMessage["System"]+" server IP: ")).strip().replace(" ", "-")
+ClientSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+ServerAdressToConnect = (serverIP, 5050)
+
+
+
+
 while (nickname in [" ", ''] or nickname.isspace() or len(nickname) > 15):
     nickname = input(textDetails.systemMessage["System"]+" invalid Nickname (only 1 to 15 characters)! try again: ")
 

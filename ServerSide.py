@@ -108,7 +108,7 @@ clients = []
 header = 64 
 formatMessage = "utf-8"
 
-localHost = '127.0.0.1'#socket.gethostbyname(socket.gethostname())
+localHost = socket.gethostbyname(socket.gethostname())
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 ServerAddress = (localHost, 5050)
 sock.bind(ServerAddress)
