@@ -41,7 +41,7 @@ class textDetails:
   \___||_||_|\__,_| \__||_|_\\___/\___/|_|_|_|  
                                                {colors.default}
     {colors.yellow}chat: {colors.default}v1.0.1      | {colors.yellow}Server:{colors.default} v1.0.1
-    {colors.yellow}Coded by: {colors.default}<ricky> | {colors.yellow}My Github:{colors.default} @rickyy-sys
+    {colors.yellow}Coded by: {colors.default}<Aiko> | {colors.yellow}My Github:{colors.default} @Aiko-sys
     {colors.default}
 """
 
