@@ -113,5 +113,5 @@ sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 ServerAddress = (host, 5050)
 sock.bind(ServerAddress)
 
-print("[START] starting the server v1.0.1")
+print("[START] starting the server v1.0.2")
 start_server()
