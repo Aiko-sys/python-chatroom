@@ -23,16 +23,29 @@ def send_client_message():
 
         while True:
 
-            message = input("")
-            # VERIFY MESSAGE
+            # GET AND VERIFY MESSAGE
+            while True:
+                try:
+                    message = input("")
+                except KeyboardInterrupt:
+                    kill()
 
-            while message in ["", " "] or message.isspace():
-                message = input("")
-            while len(message) > 160:
-                print(f'{TextDetails.systemMessage["System"]}: Your message can only be 160 characters or less')
-                message = input("")
+                if message in ["", " "] or message.isspace():
+                    continue
+                elif len(message) > 160:
+                    print(f'{TextDetails.systemMessage["System"]}: Your message can only be 160 characters or less')
+                    continue
+                elif message.startswith('/'):
+                    command = message.split(' ')[0]
+                    if command not in ClientCommands.commandList:
+                        print(f'{TextDetails.systemMessage["System"]}: Command syntax is wrong')
+                        continue
+                    else:
+                        break
+                else:
+                    break
+                    
 
-            
             # SEND MESSAGES
             clientMessage = message.encode(FORMATMESSAGE)
             clientMessageLength = len(clientMessage)
@@ -41,7 +54,7 @@ def send_client_message():
             ClientSock.send(SendClientMessageLength)
             ClientSock.send(clientMessage)
 
-            if (message == ClientCommands.disconnectCommand):
+            if (clientMessage == ClientCommands.disconnectCommand):
                 kill()
             
 
@@ -51,11 +64,12 @@ def recive_server_message():
     while True:                                                
         try:
             message = ClientSock.recv(HEADER).decode(FORMATMESSAGE)
-            print(f'{message}')
+            print(message)
             
         except:                                                 
-            print(f"{TextDetails.systemMessage['System']}: can't recive messages.")
+            print(f"{TextDetails.systemMessage['System']}: can't recive messages. Probably the server was turned off :< press enter to quit")
             ClientSock.close()
+            input()
             os.system('taskkill /F /T /PID %i' % os.getpid())
             break
         
@@ -68,7 +82,7 @@ os.system("cls")
 # GETTING USER AND SERVER INFO
 nickname = str(input(TextDetails.systemMessage["System"]+" define your nickname: ")).strip().replace(" ", "-")
 while (nickname in [" ", ''] or nickname.isspace() or len(nickname) > 15):
-    nickname = input(TextDetails.systemMessage["System"]+" invalid Nickname (only 1 to 15 characters)! try again: ")
+    nickname = input(TextDetails.systemMessage["System"]+" invalid Nickname (only 1 to 15 characters)! try again: ").strip().replace(" ", "-")
 
 serverIP = str(input(TextDetails.systemMessage["System"]+" server IP: ")).strip().replace(" ", "-")
 
@@ -82,13 +96,14 @@ ServerAdressToConnect = (serverIP, 5050)
 while True:
     try: 
         ClientSock.connect(ServerAdressToConnect)
+        input(TextDetails.systemMessage["System"]+" press enter to network connect...")
     except:
         serverIP = str(input(TextDetails.systemMessage["System"]+" The Server isn't listening on that IP, try again: ")).strip().replace(" ", "-")
         ServerAdressToConnect = (serverIP, 5050)
     else:
         break
 
-input(TextDetails.systemMessage["System"]+" press enter to network connect...")
+
 
 # STARTING CHAT
 os.system("cls")

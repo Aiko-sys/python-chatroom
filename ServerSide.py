@@ -44,7 +44,7 @@ def handle_client(ClientSocket, clientAdress):
             try:
                 ClientNickName = int(ClientNickName)
             except:
-                print("[ERRO] can't recive username")
+                print("[ERROR] can't recive username")
             else:   
                 ClientNickName = ClientSocket.recv(ClientNickName).decode(FORMATMESSAGE)
                     
@@ -56,20 +56,33 @@ def handle_client(ClientSocket, clientAdress):
                 try:
                     messageLength = int(messageLength)
                 except:
-                    print('[ERRO] cant recive messages')
+                    print('[ERROR] cant recive messages')
                 else:   
                     message = ClientSocket.recv(messageLength).decode(FORMATMESSAGE)
                     
+
                     if (message == ClientCommands.disconnectCommand):
                         print(f"[DISCONNECTED] -- {ClientNickName}")
                         clients.remove(ClientSocket)
                         broadcast(f"{TextDetails.systemMessage['plus']} <{ClientNickName}> disconnected", ClientSocket)
                         clientConnected = False
-                        
+                    elif(ClientCommands.renameCommand in message.strip()):
+                        try:
+                            oldClientNickName = ClientNickName
+                            ClientNickName = message[message.index(' '):].strip().replace(" ", "-")
+                            
+                        except:
+                            ClientSocket.send(f"{TextDetails.systemMessage['System']}: Your nickname cannot be changed".encode(FORMATMESSAGE))
+
+                        else:
+                            print(f'[USER] -- {oldClientNickName} changed their name to {ClientNickName}')
+                            ClientSocket.send(f"{TextDetails.systemMessage['System']}: Your nickname have been changed".encode(FORMATMESSAGE))
+
+                            broadcast(f'{TextDetails.systemMessage["plus"]} <{random.choice(colors.colorslist)}{oldClientNickName}{colors.default}> changed their name to <{random.choice(colors.colorslist)}{ClientNickName}{colors.default}> ', ClientSocket)
                     else:
                         if keys.serverSeeChatKey:
                             print(f'<{ClientNickName}> {message}')
-                        broadcast(f'<{random.choice(colors.colorslist)}{ClientNickName}{colors.default}> {message}', ClientSocket)
+                        broadcast(f'<{random.choice(colors.colorslist)}{ClientNickName}{colors.default}> ', ClientSocket)
 
     except ConnectionError:
         print(f"[DISCONNECTED] -- {ClientNickName}")
@@ -78,7 +91,10 @@ def handle_client(ClientSocket, clientAdress):
         
 
     except:
-        print(f"[WTF] what happenned to {ClientNickName}?")    
+        print(f"[DISCONNECTED] -- {ClientNickName}")
+        clients.remove(ClientSocket)
+        print(f"[WTF] what happenned to {ClientNickName}?")   
+        broadcast(f"{TextDetails.systemMessage['plus']} <{ClientNickName}> disconnected", ClientSocket) 
 
     ClientSocket.close()
 

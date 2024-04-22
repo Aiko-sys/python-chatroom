@@ -2,7 +2,9 @@ import socket, threading, os, sys
 
 
 class ClientCommands:
+    commandList = ["/disconnect", '/rename']
     disconnectCommand = "/disconnect"
+    renameCommand = '/rename'
 
 class colors:
     default = "\033[m"
