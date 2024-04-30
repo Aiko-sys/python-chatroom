@@ -82,7 +82,7 @@ def handle_client(ClientSocket, clientAdress):
                     else:
                         if keys.serverSeeChatKey:
                             print(f'<{ClientNickName}> {message}')
-                        broadcast(f'<{random.choice(colors.colorslist)}{ClientNickName}{colors.default}> ', ClientSocket)
+                        broadcast(f'<{random.choice(colors.colorslist)}{ClientNickName}{colors.default}> {message}', ClientSocket)
 
     except ConnectionError:
         print(f"[DISCONNECTED] -- {ClientNickName}")
