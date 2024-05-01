@@ -97,6 +97,9 @@ while True:
     try: 
         ClientSock.connect(ServerAdressToConnect)
         input(TextDetails.systemMessage["System"]+" press enter to network connect...")
+    except KeyboardInterrupt:
+        ClientSock.close()
+        kill()
     except:
         serverIP = str(input(TextDetails.systemMessage["System"]+" The Server isn't listening on that IP, try again: ")).strip().replace(" ", "-")
         ServerAdressToConnect = (serverIP, 5050)

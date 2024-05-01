@@ -23,20 +23,7 @@ class colors:
     magenta,
     cyan,
     ]
-
-class Cursors:
     
-    def move_cursor_up(lines=5):
-        sys.stdout.write(f"\033[{lines}A")
-
-    def move_cursor_down(lines=5):
-        sys.stdout.write(f"\033[{lines}B")
-
-    def clear_previous_line():
-        sys.stdout.write("\033[F")  
-        sys.stdout.write("\033[K") 
-        print('', end='', flush=True)
-
 class TextDetails:
 
     systemMessage = {
