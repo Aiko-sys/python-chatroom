@@ -40,12 +40,19 @@ def send_client_message():
                     if command not in ClientCommands.commandList:
                         print(f'{TextDetails.systemMessage["System"]}: Command syntax is wrong')
                         continue
+                    elif command == ClientCommands.disconnectCommand:
+                        kill()
+                    elif command == ClientCommands.clearCommand:
+                        clear_terminal()
+                        print(TextDetails.asciiArt)
+
+                    elif command == ClientCommands.helpCommand:
+                        print(TextDetails.help_command_string)
                     else:
                         break
                 else:
                     break
                     
-
             # SEND MESSAGES
             clientMessage = message.encode(FORMATMESSAGE)
             clientMessageLength = len(clientMessage)
@@ -53,11 +60,6 @@ def send_client_message():
             SendClientMessageLength += b' ' * (HEADER - len(SendClientMessageLength))
             ClientSock.send(SendClientMessageLength)
             ClientSock.send(clientMessage)
-
-            if (clientMessage == ClientCommands.disconnectCommand):
-                kill()
-            
-
 
 def recive_server_message():
 
@@ -76,8 +78,9 @@ def recive_server_message():
 
 # MAIN CODE >>>
 
-print(f"{colors.red}==========={colors.yellow} Checking {colors.red}==========={colors.default}")
 os.system("cls")
+print(TextDetails.welcome_message)
+print(f"{colors.magenta}==========={colors.yellow} Checking {colors.magenta}==========={colors.default}\n")
 
 # GETTING USER AND SERVER INFO
 nickname = str(input(TextDetails.systemMessage["System"]+" define your nickname: ")).strip().replace(" ", "-")
@@ -106,13 +109,11 @@ while True:
     else:
         break
 
-
-
 # STARTING CHAT
+
 os.system("cls")
 print(TextDetails.asciiArt)
-print(f"{colors.red}=-=-=-=-=-=-={colors.yellow} Welcome! {colors.red}=-=-=-=-=-=-={colors.default}\n"+TextDetails.systemMessage["plus"]+" Connection sussefully! send a message:\n")
-
+print(f"{colors.magenta}=-=-=-=-=-=-=-=-=-={colors.yellow} Welcome! {colors.magenta}=-=-=-=-=-=-=-=-=-={colors.default}\n"+TextDetails.systemMessage["plus"]+" Connection sussefully! send a message:\n"+TextDetails.systemMessage["plus"]+" Type /help to see all the commands\n")
 
 receive_thread = threading.Thread(target=recive_server_message)               
 receive_thread.start()

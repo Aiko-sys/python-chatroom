@@ -4,17 +4,21 @@ import socket, threading, random
 from modules.classes import *
 from modules.helpers import *
 from modules.exceptions import *
+from modules.logger import Logger
 
+# OBJECTS
+logger = Logger()
 # ARRAYS
 clients = []
 clientNicknames = []
+bannedClients = []
 
 # CONSTS
 HEADER = 64 
 FORMATMESSAGE = "utf-8"
 
-
 def start_server():
+    logger.log(f"Server starting on {host}", "start")
 
     sock.listen()
     print(f"[LISTENING] Server is listening on {host}")
@@ -29,7 +33,7 @@ def start_server():
 def broadcast(message, senderClient):
     try:
         for client in clients:
-            if (client!=senderClient):
+            if (client!=senderClient and client not in bannedClients):
                 client.send(message.encode(FORMATMESSAGE))
     except:
         print("[ERROR] broadcast fail")
@@ -64,6 +68,7 @@ def handle_client(ClientSocket, clientAdress):
             clientNicknames.append(ClientNickName)
 
     print(f"[NEW CONNECTION] -- <{ClientNickName}> from ip: {clientAdress[0]} connected.")
+    logger.log(f"<{ClientNickName}> from ip: {clientAdress[0]} connected.", "connection")
     broadcast(f"{TextDetails.systemMessage['plus']} <{ClientNickName}> connected", ClientSocket)
     
     # RECIVE CLIENT MESSAGES
@@ -81,6 +86,7 @@ def handle_client(ClientSocket, clientAdress):
 
                     if (message == ClientCommands.disconnectCommand):
                         print(f"[DISCONNECTED] -- <{ClientNickName}> from ip: {clientAdress[0]}")
+                        logger.log(f"<{ClientNickName}> from ip: {clientAdress[0]}", "disconnection")
                         clients.remove(ClientSocket)
                         clientNicknames.remove(ClientNickName)
                         broadcast(f"{TextDetails.systemMessage['plus']} <{ClientNickName}> disconnected", ClientSocket)
@@ -89,10 +95,10 @@ def handle_client(ClientSocket, clientAdress):
                     elif(ClientCommands.renameCommand in message.strip()):
                         try:
                             oldClientNickName = ClientNickName
-                            ClientNickName = message[message.index(' '):].strip().replace(" ", "-")
+                            ClientNickName = message[message.index(' '):].strip().replace(" ", "-") 
 
                             if ClientNickName in clientNicknames:
-                                raise AlreadyExistingNickName()
+                                raise AlreadyExistingNickName("Nickname Already Exists") 
                             else:
                                 clientNicknames[clientNicknames.index(oldClientNickName)] = ClientNickName
                         except AlreadyExistingNickName:
@@ -104,15 +110,17 @@ def handle_client(ClientSocket, clientAdress):
                         else:
                             print(f'[USER] -- {oldClientNickName} changed their name to {ClientNickName}')
                             ClientSocket.send(f"{TextDetails.systemMessage['System']}: Your nickname has been changed".encode(FORMATMESSAGE))
-
-                            broadcast(f'{TextDetails.systemMessage["plus"]} <{random.choice(colors.colorslist)}{oldClientNickName}{colors.default}> changed their name to <{random.choice(colors.colorslist)}{ClientNickName}{colors.default}> ', ClientSocket)
+                            logger.log(f"{oldClientNickName} changed their name to {ClientNickName}", "rename")
+                            broadcast(f'{TextDetails.systemMessage["plus"]} <{colors.yellow}{oldClientNickName}{colors.default}> changed their name to <{colors.yellow}{ClientNickName}{colors.default}> ', ClientSocket)
                     else:
                         if keys.serverSeeChatKey:
                             print(f'<{ClientNickName}> {message}')
-                        broadcast(f'<{random.choice(colors.colorslist)}{ClientNickName}{colors.default}> {message}', ClientSocket)
+                        logger.log(f"<{ClientNickName}> {message}", "message")
+                        broadcast(f'<{colors.yellow}{ClientNickName}{colors.default}> {message}', ClientSocket)
 
     except ConnectionError:
         print(f"[DISCONNECTED] -- <{ClientNickName}> from ip: {clientAdress[0]}")
+        logger.log(f"<{ClientNickName}> from ip: {clientAdress[0]}", "disconnection")
         clients.remove(ClientSocket)
         clientNicknames.remove(ClientNickName)
         broadcast(f"{TextDetails.systemMessage['plus']} <{ClientNickName}> disconnected", ClientSocket)
@@ -120,13 +128,13 @@ def handle_client(ClientSocket, clientAdress):
 
     except:
         print(f"[DISCONNECTED] -- <{ClientNickName}> from ip: {clientAdress[0]}")
+        logger.log(f"<{ClientNickName}> from ip: {clientAdress[0]}", "disconnection")
         clients.remove(ClientSocket)
         clientNicknames.remove(ClientNickName)
         print(f"[WTF] what happenned to {ClientNickName}?")   
         broadcast(f"{TextDetails.systemMessage['plus']} <{ClientNickName}> disconnected", ClientSocket) 
 
     ClientSocket.close()
-
 
 # MAIN CODE
 
@@ -137,5 +145,5 @@ ServerAddress = (host, 5050)
 sock.bind(ServerAddress)
 
 # STARTING THE SERVER
-print("[START] starting the server v1.0.2")
+print("[START] starting the server v1.1.0")
 start_server()

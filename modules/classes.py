@@ -2,9 +2,11 @@ import socket, threading, os, sys
 
 
 class ClientCommands:
-    commandList = ["/disconnect", '/rename']
+    commandList = ["/disconnect", '/rename', '/clear', '/help']
     disconnectCommand = "/disconnect"
     renameCommand = '/rename'
+    clearCommand = '/clear'
+    helpCommand = '/help'
 
 class colors:
     default = "\033[m"
@@ -27,11 +29,11 @@ class colors:
 class TextDetails:
 
     systemMessage = {
-    "plus":f"{colors.red}[{colors.yellow}+{colors.red}]{colors.default}",
-    "System":f"{colors.red}[{colors.yellow}SYSTEM{colors.red}]{colors.default}"}
+    "plus":f"{colors.magenta}[{colors.yellow}+{colors.magenta}]{colors.default}",
+    "System":f"{colors.magenta}[{colors.yellow}SYSTEM{colors.magenta}]{colors.default}"}
 
 
-    asciiArt = f"""
+    OldasciiArt = f"""
                      {colors.red} 
    (       )           ) )\ )                   
    )\   ( /(     )  ( /((()/(              )    
@@ -45,5 +47,45 @@ class TextDetails:
     {colors.yellow}Coded by: {colors.default}<Aiko> | {colors.yellow}My Github:{colors.default} @Aiko-sys
     {colors.default}
 """
+    asciiArt = f"""
+    {colors.magenta}
+ ██████╗██╗  ██╗ █████╗ ████████╗    ██████╗  ██████╗  ██████╗ ███╗   ███╗
+██╔════╝██║  ██║██╔══██╗╚══██╔══╝    ██╔══██╗██╔═══██╗██╔═══██╗████╗ ████║
+██║     ███████║███████║   ██║       ██████╔╝██║   ██║██║   ██║██╔████╔██║
+██║     ██╔══██║██╔══██║   ██║       ██╔══██╗██║   ██║██║   ██║██║╚██╔╝██║
+╚██████╗██║  ██║██║  ██║   ██║       ██║  ██║╚██████╔╝╚██████╔╝██║ ╚═╝ ██║
+ ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝       ╚═╝  ╚═╝ ╚═════╝  ╚═════╝ ╚═╝     ╚═╝
+                                                                     
+    {colors.yellow}chat: {colors.default}v1.1.0     | {colors.yellow}Server:{colors.default} v1.1.0
+    {colors.yellow}Coded by: {colors.default}<Aiko> | {colors.yellow}My Github:{colors.default} @Aiko-sys
+    """
+
+    welcome_message = f"""
+    {colors.magenta}
+██╗    ██╗███████╗██╗      ██████╗ ██████╗ ███╗   ███╗███████╗
+██║    ██║██╔════╝██║     ██╔════╝██╔═══██╗████╗ ████║██╔════╝
+██║ █╗ ██║█████╗  ██║     ██║     ██║   ██║██╔████╔██║█████╗  
+██║███╗██║██╔══╝  ██║     ██║     ██║   ██║██║╚██╔╝██║██╔══╝  
+╚███╔███╔╝███████╗███████╗╚██████╗╚██████╔╝██║ ╚═╝ ██║███████╗
+ ╚══╝╚══╝ ╚══════╝╚══════╝ ╚═════╝ ╚═════╝ ╚═╝     ╚═╝╚══════╝
+{colors.default}                                                              
+    """
+
+    help_command_string = f"""
+                {colors.yellow}All commands:
+{colors.magenta}=================================================
+                
+{colors.yellow}- /disconnect : {colors.default}disconnect from the chat and leave 
+the terminal
+
+{colors.yellow}- /rename <name> : {colors.default}change your username
+
+{colors.yellow}- /clear : {colors.default}clean the terminal
+
+{colors.magenta}=================================================
+{colors.default}
+    """
+
 class keys:
     serverSeeChatKey = True
+    logKey = False
