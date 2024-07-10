@@ -2,7 +2,7 @@
 <p>This is a chatroom created in python with libraries "Socket and "Threading". There are two main files: ClientSide.py and ServerSide.py, there are Also modules with a logger class.</p>
 
 ### ServerSide.py
-<img src="https://github.com/Aiko-sys/python-chatroom/blob/preview/ServerSide.png" alt="...">
+<img width="700" src="https://github.com/Aiko-sys/python-chatroom/blob/main/preview/ServerSide.png" alt="...">
 
 <p>This file opens a terminal that shows all the interactions in the chatroom</p>
 
@@ -28,8 +28,8 @@ logKey(bool) : control if the application will log the interactions in the chat 
 
 ### ClientSide.py
 
-<img src="https://github.com/AAiko-sys/python-chatroom/blob/preview/ClientSideWelcome.png" alt="...">
-<img src="https://github.com/AAiko-sys/python-chatroom/blob/preview/ClientSideChat.png" alt="...">
+<img width="700" src="https://github.com/Aiko-sys/python-chatroom/blob/main/preview/ClientSideWelcome.png" alt="...">
+<img width="700" src="https://github.com/Aiko-sys/python-chatroom/blob/main/preview/ClientSideChat.png" alt="...">
 
 <p>This file opens the application that clients will interact with chat</p>
 
